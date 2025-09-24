@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎮 Tic Tac Toe vs Sassy Computer!</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        .game-info {
+            margin: 20px 0;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .current-player {
+            color: #ffeb3b;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+        .computer-turn {
+            color: #ff9800;
+            animation: thinking 1s infinite;
+        }
+
+        @keyframes thinking {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .computer-insult {
+            background: rgba(255, 152, 0, 0.2);
+            border: 2px solid #ff9800;
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ff9800;
+            animation: insultPulse 2s ease-in-out;
+            backdrop-filter: blur(5px);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        @keyframes insultPulse {
+            0% { transform: scale(0.9); opacity: 0; }
+            20% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            grid-template-rows: repeat(3, 100px);
+            gap: 8px;
+            margin: 20px auto;
+            background: #333;
+            padding: 8px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            width: fit-content;
+        }
+
+        .cell {
+            background: linear-gradient(145deg, #f0f0f0, #d0d0d0);
+            border: none;
+            border-radius: 10px;
+            font-size: 2.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cell:hover:not(:disabled) {
+            background: linear-gradient(145deg, #fff, #e0e0e0);
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell.x {
+            color: #e91e63;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell.o {
+            color: #2196f3;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .cell:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .winning-cell {
+            background: linear-gradient(145deg, #4caf50, #45a049) !important;
+            animation: pulse 0.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .reset-btn {
+            background: linear-gradient(145deg, #ff6b6b, #ee5a52);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .reset-btn:hover {
+            background: linear-gradient(145deg, #ff5252, #e53935);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .player-score { color: #e91e63; }
+        .computer-score { color: #2196f3; }
+        .tie-score { color: #ffeb3b; }
+
+        .game-message {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 15px 0;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .winner-message {
+            color: #4caf50;
+            animation: celebration 1s ease-in-out;
+        }
+
+        .loser-message {
+            color: #f44336;
+            animation: celebration 1s ease-in-out;
+        }
+
+        .tie-message {
+            color: #ffeb3b;
+        }
+
+        @keyframes celebration {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .computer-move {
+            animation: computerPlace 0.5s ease-in-out;
+        }
+
+        @keyframes computerPlace {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎮 Tic Tac Toe vs Sassy Computer! 🤖</h1>
+        
+        <div class="score-board">
+            <div class="score player-score">
+                <div>You (X)</div>
+                <span class="score-value" id="player-score">0</span>
+            </div>
+            <div class="score tie-score">
+                <div>Ties</div>
+                <span class="score-value" id="tie-score">0</span>
+            </div>
+            <div class="score computer-score">
+                <div>Computer (O)</div>
+                <span class="score-value" id="computer-score">0</span>
+            </div>
+        </div>
+
+        <div class="game-info">
+            <span id="turn-indicator">Your Turn</span>
+        </div>
+
+        <div id="computer-taunt" class="computer-insult" style="display: none;"></div>
+
+        <div class="game-board" id="game-board">
+            <button class="cell" data-index="0"></button>
+            <button class="cell" data-index="1"></button>
+            <button class="cell" data-index="2"></button>
+            <button class="cell" data-index="3"></button>
+            <button class="cell" data-index="4"></button>
+            <button class="cell" data-index="5"></button>
+            <button class="cell" data-index="6"></button>
+            <button class="cell" data-index="7"></button>
+            <button class="cell" data-index="8"></button>
+        </div>
+
+        <div class="game-message" id="game-message"></div>
+
+        <div class="controls">
+            <button class="reset-btn" onclick="resetGame()">🔄 New Game</button>
+        </div>
+    </div>
+
+    <audio controls autoplay>
+    <source src="Lofi-Hiphop.m4a" type="audio/mp4">
+    Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        let currentPlayer = 'X'; // Player is always X
+        let gameBoard = ['', '', '', '', '', '', '', '', ''];
+        let gameActive = true;
+        let isComputerTurn = false;
+        let scores = { player: 0, computer: 0, tie: 0 };
+
+        const winningConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+            [0, 4, 8], [2, 4, 6] // Diagonals
+        ];
+
+        // Computer insults and taunts
+        const computerInsults = [
+            "Is that your best move? 🙄",
+            "My grandmother could play better than that! 👵",
+            "Are you even trying? 😏",
+            "Interesting choice... if you're trying to lose! 🤔",
+            "That move was almost as good as my worst move! 😂",
+            "Did you close your eyes when you picked that spot? 👀",
+            "I've seen better moves from a broken calculator! 🧮",
+            "That's cute, you think you can win! 😊",
+            "Are you playing tic-tac-toe or just randomly clicking? 🎯",
+            "I'm starting to feel bad for you... almost! 😈",
+            "That move was so predictable, I saw it coming yesterday! 📅",
+            "Do you need me to explain the rules again? 📚"
+        ];
+
+        const computerWinTaunts = [
+            "Too easy! Maybe try checkers next time? 🏆😎",
+            "I didn't even break a sweat! 💪",
+            "Victory is mine! Better luck never! 👑",
+            "That was almost challenging... just kidding! 😂",
+            "I win again! Shocking, I know! ⚡",
+            "Maybe you should stick to solitaire! 🃏",
+            "Another victory for artificial intelligence! 🤖🏆"
+        ];
+
+        const computerLoseTaunts = [
+            "Lucky move... I'll get you next time! 😤",
+            "You got lucky this round! 🍀",
+            "Enjoy this moment, it won't happen again! 😏",
+            "I let you win... obviously! 🙄",
+            "Even a broken clock is right twice a day! ⏰",
+            "Fine, you win this one... barely! 😑"
+        ];
+
+        const computerTieTaunts = [
+            "Fine, we'll call it a draw... this time! 😑",
+            "I suppose you're not completely hopeless! 🤷‍♂️",
+            "A tie? I must be malfunctioning! 🔧",
+            "Not bad... for a human! 👤",
+            "I'll accept this stalemate... reluctantly! 😤"
+        ];
+
+        const cells = document.querySelectorAll('.cell');
+        const turnIndicatorElement = document.getElementById('turn-indicator');
+        const gameMessageElement = document.getElementById('game-message');
+        const computerTauntElement = document.getElementById('computer-taunt');
+        const playerScoreElement = document.getElementById('player-score');
+        const computerScoreElement = document.getElementById('computer-score');
+        const tieScoreElement = document.getElementById('tie-score');
+
+        // Add click event listeners to all cells
+        cells.forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
+
+        function showComputerTaunt(message) {
+            computerTauntElement.textContent = message;
+            computerTauntElement.style.display = 'block';
+            
+            // Hide the taunt after 4 seconds
+            setTimeout(() => {
+                computerTauntElement.style.display = 'none';
+            }, 4000);
+        }
+
+        function getRandomInsult(insultArray) {
+            return insultArray[Math.floor(Math.random() * insultArray.length)];
+        }
+
+        function handleCellClick(event) {
+            if (isComputerTurn || !gameActive) return;
+
+            const clickedCell = event.target;
+            const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
+
+            // Check if cell is already filled
+            if (gameBoard[clickedCellIndex] !== '') {
+                return;
+            }
+
+            // Player move
+            makeMove(clickedCellIndex, 'X', clickedCell);
+            
+            // Show computer insult after player move (but not if game ended)
+            if (gameActive && !checkResult('X')) {
+                setTimeout(() => {
+                    showComputerTaunt(getRandomInsult(computerInsults));
+                }, 500);
+            }
+        }
+
+        function makeMove(index, player, cellElement) {
+            gameBoard[index] = player;
+            cellElement.textContent = player;
+            cellElement.classList.add(player.toLowerCase());
+            cellElement.disabled = true;
+
+            // Check for win or tie
+            if (checkResult(player)) {
+                return; // Game ended
+            }
+
+            // Switch turns
+            if (player === 'X') {
+                isComputerTurn = true;
+                turnIndicatorElement.textContent = "Computer's Turn";
+                turnIndicatorElement.className = 'computer-turn';
+                
+                // Computer makes move after delay
+                setTimeout(computerMove, Math.random() * 1000 + 1000); // 1000-2000ms delay for insult reading
+            } else {
+                isComputerTurn = false;
+                turnIndicatorElement.textContent = "Your Turn";
+                turnIndicatorElement.className = 'current-player';
+            }
+        }
+
+        function computerMove() {
+            if (!gameActive || !isComputerTurn) return;
+
+            const bestMove = getBestMove();
+            const cellElement = cells[bestMove];
+            
+            // Add animation class
+            cellElement.classList.add('computer-move');
+            
+            makeMove(bestMove, 'O', cellElement);
+            
+            // Remove animation class after animation completes
+            setTimeout(() => {
+                cellElement.classList.remove('computer-move');
+            }, 500);
+        }
+
+        function getBestMove() {
+            // 1. Check if computer can win
+            for (let i = 0; i < 9; i++) {
+                if (gameBoard[i] === '') {
+                    gameBoard[i] = 'O';
+                    if (checkWinCondition('O')) {
+                        gameBoard[i] = ''; // Reset
+                        return i;
+                    }
+                    gameBoard[i] = ''; // Reset
+                }
+            }
+
+            // 2. Check if need to block player from winning
+            for (let i = 0; i < 9; i++) {
+                if (gameBoard[i] === '') {
+                    gameBoard[i] = 'X';
+                    if (checkWinCondition('X')) {
+                        gameBoard[i] = ''; // Reset
+                        return i;
+                    }
+                    gameBoard[i] = ''; // Reset
+                }
+            }
+
+            // 3. Take center if available
+            if (gameBoard[4] === '') {
+                return 4;
+            }
+
+            // 4. Take corners
+            const corners = [0, 2, 6, 8];
+            const availableCorners = corners.filter(i => gameBoard[i] === '');
+            if (availableCorners.length > 0) {
+                return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+            }
+
+            // 5. Take any available space
+            const availableMoves = [];
+            for (let i = 0; i < 9; i++) {
+                if (gameBoard[i] === '') {
+                    availableMoves.push(i);
+                }
+            }
+            return availableMoves[Math.floor(Math.random() * availableMoves.length)];
+        }
+
+        function checkWinCondition(player) {
+            return winningConditions.some(condition => {
+                return condition.every(index => gameBoard[index] === player);
+            });
+        }
+
+        function checkResult(player) {
+            let roundWon = false;
+            let winningCells = [];
+
+            // Check for winning condition
+            for (let i = 0; i < winningConditions.length; i++) {
+                const [a, b, c] = winningConditions[i];
+                if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
+                    roundWon = true;
+                    winningCells = [a, b, c];
+                    break;
+                }
+            }
+
+            if (roundWon) {
+                // Highlight winning cells
+                winningCells.forEach(index => {
+                    cells[index].classList.add('winning-cell');
+                });
+                
+                if (player === 'X') {
+                    gameMessageElement.textContent = "🎉 You Win! 🎉";
+                    gameMessageElement.className = 'game-message winner-message';
+                    scores.player++;
+                    // Show computer's grudging respect
+                    setTimeout(() => {
+                        showComputerTaunt(getRandomInsult(computerLoseTaunts));
+                    }, 1000);
+                } else {
+                    gameMessageElement.textContent = "🤖 Computer Wins! 🤖";
+                    gameMessageElement.className = 'game-message loser-message';
+                    scores.computer++;
+                    // Show computer's victory taunt
+                    setTimeout(() => {
+                        showComputerTaunt(getRandomInsult(computerWinTaunts));
+                    }, 1000);
+                }
+                
+                updateScoreDisplay();
+                gameActive = false;
+                isComputerTurn = false;
+                turnIndicatorElement.textContent = "Game Over";
+                turnIndicatorElement.className = '';
+                disableAllCells();
+                return true;
+            }
+
+            // Check for tie
+            if (!gameBoard.includes('')) {
+                gameMessageElement.textContent = "🤝 It's a Tie! 🤝";
+                gameMessageElement.className = 'game-message tie-message';
+                scores.tie++;
+                updateScoreDisplay();
+                gameActive = false;
+                isComputerTurn = false;
+                turnIndicatorElement.textContent = "Game Over";
+                turnIndicatorElement.className = '';
+                // Show computer's tie taunt
+                setTimeout(() => {
+                    showComputerTaunt(getRandomInsult(computerTieTaunts));
+                }, 1000);
+                return true;
+            }
+
+            return false;
+        }
+
+        function disableAllCells() {
+            cells.forEach(cell => {
+                cell.disabled = true;
+            });
+        }
+
+        function updateScoreDisplay() {
+            playerScoreElement.textContent = scores.player;
+            computerScoreElement.textContent = scores.computer;
+            tieScoreElement.textContent = scores.tie;
+        }
+
+        function resetGame() {
+            currentPlayer = 'X';
+            gameBoard = ['', '', '', '', '', '', '', '', ''];
+            gameActive = true;
+            isComputerTurn = false;
+            
+            turnIndicatorElement.textContent = "Your Turn";
+            turnIndicatorElement.className = 'current-player';
+            gameMessageElement.textContent = '';
+            gameMessageElement.className = 'game-message';
+            computerTauntElement.style.display = 'none';
+
+            cells.forEach(cell => {
+                cell.textContent = '';
+                cell.disabled = false;
+                cell.classList.remove('x', 'o', 'winning-cell', 'computer-move');
+            });
+        }
+
+        // Initialize the game
+        updateScoreDisplay();
+    </script>
+</body>
+</html>

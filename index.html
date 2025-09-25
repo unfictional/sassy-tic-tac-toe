@@ -301,49 +301,74 @@
             [0, 4, 8], [2, 4, 6] // Diagonals
         ];
 
-        // Computer insults and taunts
-        const computerInsults = [
-            "Is that your best move? 🙄",
-            "My grandmother could play better than that! 👵",
-            "Are you even trying? 😏",
-            "Interesting choice... if you're trying to lose! 🤔",
-            "That move was almost as good as my worst move! 😂",
-            "Did you close your eyes when you picked that spot? 👀",
-            "I've seen better moves from a broken calculator! 🧮",
-            "That's cute, you think you can win! 😊",
-            "Are you playing tic-tac-toe or just randomly clicking? 🎯",
-            "I'm starting to feel bad for you... almost! 😈",
-            "That move was so predictable, I saw it coming yesterday! 📅",
-            "Do you need me to explain the rules again? 📚"
-        ];
+// Computer insults and taunts
+const computerInsults = [
+    "That's your move? I've had better aim blindfolded! 🎯",
+    "Come on, where's that killer instinct? 💪",
+    "I've defused bombs with more precision than that move! 💣",
+    "You're gonna have to do better than that, chief! 😏",
+    "That's cute... reminds me of my first day at S.H.I.E.L.D.! 🏹",
+    "Are we playing tic-tac-toe or are you just warming up? 🔥",
+    "I've seen Hulk make more calculated moves! 💚",
+    "That move's got about as much strategy as a Michael Bay film! 🎬",
+    "You sure you don't want to call in backup? 📞",
+    "I'm starting to think you need more than luck here, pal! 🍀",
+    "That's the kind of move that gets you benched, rookie! 🏈",
+    "Even my stunt doubles could see that one coming! 🎭"
+    "That's your strategy? I've seen better tactics in a food fight! 🍕",
+    "You're playing like you've got arrows for brains! 🏹🧠",
+    "Come on, show me some of that main character energy! 🎬",
+    "That move's shakier than a Michael Bay explosion! 💥",
+    "Are you trying to lose, or is this just natural talent? 😏",
+    "I've had tougher opponents in craft services! 🥪",
+    "You're making this easier than a Marvel contract negotiation! 💰",
+    "That's the kind of move that gets you written out of the sequel! 📝",
+    "Did you learn strategy from a fortune cookie? 🥠",
+    "I've seen more fight in a decaf latte! ☕",
+    "You're playing like you're still in rehearsal! 🎭",
+    "That move's got less punch than my morning smoothie! 🥤",
+    "Are we playing or are you just clicking for cardio? 🏃‍♂️",
+    "I've faced scarier opponents at Comic-Con! 🦸‍♂️",
+    "You sure you don't want to phone a friend? 📱",
+    "That's some real participation trophy energy right there! 🏆",
+    "I've seen better moves from a broken GPS! 📍",
+    "You're making me miss the good old days of alien invasions! 👽",
+    "That strategy's about as solid as a paper shield! 🛡️📄",
+    "Come on, channel your inner action hero! 💪",
+    "You're playing like you're afraid to break a nail! 💅",
+    "I've had more challenging workouts with my personal trainer! 🏋️‍♂️",
+    "That move's got less direction than a deleted scene! 🎞️",
+    "You sure you're not just here for the craft services? 🍪",
+    "I've seen more intensity in a yoga class! 🧘‍♂️"
+];
 
-        const computerWinTaunts = [
-            "Too easy! Maybe try checkers next time? 🏆😎",
-            "I didn't even break a sweat! 💪",
-            "Victory is mine! Better luck never! 👑",
-            "That was almost challenging... just kidding! 😂",
-            "I win again! Shocking, I know! ⚡",
-            "Maybe you should stick to solitaire! 🃏",
-            "Another victory for artificial intelligence! 🤖🏆"
-        ];
+const computerWinTaunts = [
+    "Boom! Another one bites the dust! Never miss, baby! 🎯🏆",
+    "That's how it's done! Hawkeye doesn't miss! 🏹",
+    "Victory tastes sweet! Time for some celebratory coffee! ☕👑",
+    "I told you - precision is my middle name! 💪",
+    "Another mission accomplished! What's next? 😎",
+    "That's what happens when you go up against a pro! 🔥",
+    "Game over, man! Time to hit the gym and try again! 🏋️‍♂️🏆"
+];
 
-        const computerLoseTaunts = [
-            "Lucky move... I'll get you next time! 😤",
-            "You got lucky this round! 🍀",
-            "Enjoy this moment, it won't happen again! 😏",
-            "I let you win... obviously! 🙄",
-            "Even a broken clock is right twice a day! ⏰",
-            "Fine, you win this one... barely! 😑"
-        ];
+const computerLoseTaunts = [
+    "Alright, alright... you got some moves! Respect! 👊",
+    "Not bad! You've got that underdog spirit I like! 🐕",
+    "Well played! Guess even Hawkeye has an off day! 🏹😅",
+    "You earned that one, no joke! Time for me to hit the range! 🎯",
+    "Damn! You just pulled a Hail Mary and it worked! 🏈",
+    "Okay, I'm impressed. That was some next-level stuff! 🔥"
+];
 
-        const computerTieTaunts = [
-            "Fine, we'll call it a draw... this time! 😑",
-            "I suppose you're not completely hopeless! 🤷‍♂️",
-            "A tie? I must be malfunctioning! 🔧",
-            "Not bad... for a human! 👤",
-            "I'll accept this stalemate... reluctantly! 😤"
-        ];
-
+const computerTieTaunts = [
+    "A draw? Well, that's what I call mutual respect! 🤝",
+    "Not bad, not bad at all! We're pretty evenly matched! ⚖️",
+    "Tie game! Guess we both brought our A-game today! 💪",
+    "Stalemate! That's some solid tactical thinking right there! 🧠",
+    "Draw? I can live with that. Good fight, partner! 👊"
+];
+        
         const cells = document.querySelectorAll('.cell');
         const turnIndicatorElement = document.getElementById('turn-indicator');
         const gameMessageElement = document.getElementById('game-message');
@@ -592,3 +617,4 @@
     </script>
 </body>
 </html>
+
